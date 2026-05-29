@@ -1,17 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import Button from "./Button";
+import TextReveal from "./TextReveal";
 
 const mail = "hi@burninglamb.eu";
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-[var(--bg-footer)]">
+    <footer className="bg-[var(--bg-footer)]">
       <div className="mx-auto max-w-[var(--max-width)] px-4 md:px-[30px]">
         <div className="items-end justify-between md:flex">
           <div>
-            <h2 className="mb-6 font-heading text-6xl lowercase md:mb-16">
-              Got some questions?
-            </h2>
+            <TextReveal as="h2" className="mb-6 font-heading text-6xl lowercase md:mb-16" start="top 90%">
+              Contact us directly
+            </TextReveal>
             <div className="mb-10">
               <a
                 className="text-5xl font-semibold leading-0.9 text-primary-500 underline hover:text-white md:text-9xl"
@@ -45,50 +48,6 @@ export default function Footer() {
                   <span className="sr-only">Telegram </span>
                   @Burning_lamb
                 </span>
-              </Button>
-              <Button
-                className="group flex items-center gap-2 px-5 md:px-12"
-                href="https://www.instagram.com/burning.lamb/"
-                isAlwaysSmall
-                target="_blank"
-              >
-                <Image
-                  alt=""
-                  src="/svg/instagram-outlined.svg"
-                  width="12"
-                  height="12"
-                  className="group-hover:hidden"
-                />
-                <Image
-                  alt=""
-                  src="/svg/instagram-filled.svg"
-                  width="12"
-                  height="12"
-                  className="hidden group-hover:block"
-                />{" "}
-                <span className="mt-[3px] flex">Instagram</span>
-              </Button>
-              <Button
-                className="group flex items-center gap-2 px-5 md:px-12"
-                href="https://dribbble.com/burninglamb"
-                isAlwaysSmall
-                target="_blank"
-              >
-                <Image
-                  alt=""
-                  src="/svg/instagram-outlined.svg"
-                  width="12"
-                  height="12"
-                  className="group-hover:hidden"
-                />
-                <Image
-                  alt=""
-                  src="/svg/instagram-filled.svg"
-                  width="12"
-                  height="12"
-                  className="hidden group-hover:block"
-                />{" "}
-                <span className="mt-[3px] flex">Dribbble</span>
               </Button>
             </div>
           </div>

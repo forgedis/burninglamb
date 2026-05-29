@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import Button from "./Button";
 import ProjectsCarousel from "./ProjectsCarousel";
 import ProjectsTitle from "./ProjectsTitle";
+import TextReveal from "./TextReveal";
 
 export default function Project({
   title,
@@ -43,9 +44,9 @@ export default function Project({
         <ProjectsCarousel slides={slides} />
       </div>
       <Tags className="flex sm:hidden mb-4" />
-      <p className="text-lg leading-1.2 w-[70%] lg:w-2/5">
+      <TextReveal as="p" className="text-lg leading-1.2 w-[70%] lg:w-2/5" start="top 92%">
         {description}
-      </p>
+      </TextReveal>
     </article>
   );
 }

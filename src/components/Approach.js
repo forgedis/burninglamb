@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import phases from "@/data/approach-phases";
-import services from "@/data/services";
+import TextReveal from "@/components/TextReveal";
 
 export default function Approach({ className, ...other }) {
   return (
@@ -10,47 +10,16 @@ export default function Approach({ className, ...other }) {
       {...other}
     >
       <div className="grid md:grid-cols-[1fr_0.66fr] mb-20">
-        <h2
+        <TextReveal
+          as="h2"
           id="approach-title"
-          className="mb-8 flex items-baseline gap-4 md:gap-6"
+          className="mb-8 font-heading text-6xl leading-1.3 tracking-2 lowercase"
         >
-          <span className="font-heading text-6xl leading-1.3 tracking-2 lowercase">
-            Approach
-          </span>
-        </h2>
-        <p className="text-lg leading-1.2">
-          I’m a 26-year-old Designer with a primary focus on Branding, Web Design, 
-          UX and Motion Design. My work focuses on creating visually engaging 
-          and dynamic visual experiences that bring brands, products, 
-          and stories to life. I combine a sense of aesthetics with a 
-          deep understanding of storytelling to craft designs that not 
-          only look great but also communicate effectively.
-        </p>
-      </div>
-      <div className="approach-image h-[528px] sm:h-[428px] sm:bg-[url('/images/approach-bg.jpg')] grid items-end pb-14 mb-16 md:mb-36">
-        <div className="grid grid-cols-[repeat(3,auto)] md:grid-cols-[repeat(6,auto)] gap-4 justify-between text-lg uppercase">
-          {services.map((item) => (
-            <span
-              key={item}
-              className="hover:text-primary-500 transition-colors"
-            >
-              / {item}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="grid md:grid-cols-[1fr_0.66fr] mb-20">
-        <h2
-          id="approach-title"
-          className="mb-8 flex items-baseline gap-4 md:gap-6"
-        >
-          <span className="text-lg">
-            How will we work together?
-          </span>
-        </h2>
-        <p className="text-lg">
+          Approach
+        </TextReveal>
+        <TextReveal as="p" className="text-lg leading-1.2" start="top 85%">
           The design process is built on continuous collaboration, where ideas develop through regular feedback and iteration. This ongoing approach helps ensure the work stays aligned with your goals at every stage.
-        </p>
+        </TextReveal>
       </div>
       <div>
         {phases.map(({ title, description }, index) => (
@@ -64,9 +33,9 @@ export default function Approach({ className, ...other }) {
                   .0{index+1}
                 </span>
               </div>
-              <span className="font-heading lowercase mt-0.5 md:mt-0">{title}</span>
+              <TextReveal as="span" className="font-heading lowercase mt-0.5 md:mt-0" start="top 95%">{title}</TextReveal>
             </div>
-            <span className="opacity-60 text-lg">{description}</span>
+            <TextReveal as="p" className="opacity-60 text-lg m-0" start="top 95%" lineStagger={0.1}>{description}</TextReveal>
             <div className="z-[-1] w-full md:w-[calc(100%+60px)] bg-primary-500 absolute bottom-0 md:-translate-x-[30px] h-0 group-hover:h-full transition-all"></div>
           </div>
         ))}

@@ -26,8 +26,8 @@ export default function Header({ className, ...other }) {
         <HeaderLink href="#approach" className="hidden md:flex text-lg">
           Approach
         </HeaderLink>
-        <HeaderLink href="#services" className="hidden md:flex text-lg">
-          Services
+        <HeaderLink href="#contact" className="hidden md:flex text-lg">
+          Contact
         </HeaderLink>
         <div className="logo md:hidden" />
       </nav>
