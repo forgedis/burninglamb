@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components\\\\TextReveal.js -> split-type\":{\"id\":\"components\\\\TextReveal.js -> split-type\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_split-type_dist_index_js.js\"]}}"

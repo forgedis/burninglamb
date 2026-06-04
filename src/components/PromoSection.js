@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { gsap } from "gsap";
-import TextReveal from "@/components/TextReveal";
 
 const promoImages = [
   { src: "/images/newprojects/aiclonely.png", alt: "AI Clonely project" },
@@ -113,7 +112,7 @@ export default function PromoSection({ className }) {
           style={{
             width: `${IMG_W}px`,
             height: `${IMG_H}px`,
-            zIndex: promoImages.length - i,
+            zIndex: 10 + promoImages.length - i,
           }}
         >
           <Image
@@ -127,18 +126,15 @@ export default function PromoSection({ className }) {
       ))}
 
       {/* Center content: text + CTA */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 md:px-[30px] py-24 md:py-32 min-h-[640px]">
-        <TextReveal
-          as="p"
-          lineStagger={0.09}
-          start="top 90%"
+      <div className="relative z-[2] flex flex-col items-center justify-center text-center px-4 md:px-[30px] py-24 md:py-32 min-h-[640px]">
+        <p
           className="font-heading leading-0.9 tracking-2 lowercase text-black text-center mb-10 md:mb-14"
           style={{ fontSize: "clamp(3rem, 7vw, 6.25rem)", maxWidth: "640px" }}
         >
-          Web design tailored to your needs
-        </TextReveal>
+          web design<br />tailored to<br />your needs
+        </p>
         <a
-          href="#contact"
+          href="/contact"
           className="group relative flex items-center justify-between bg-black rounded-[4px] px-10 overflow-hidden"
           style={{ width: "388px", maxWidth: "100%", height: "84px" }}
         >

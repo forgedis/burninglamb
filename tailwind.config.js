@@ -8,7 +8,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      heading: '"Dirtyline 36Daysoftype 2022"',
+      heading: '"Dirtyline 36daysoftype 2022"',
     },
     fontSize: {
       "2xs": "0.625rem", // 10px

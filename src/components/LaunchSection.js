@@ -4,6 +4,8 @@ import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import TextReveal from "@/components/TextReveal";
 
+const INITIAL_FORM = { name: "", contact: "", project: "" };
+
 const serviceOptions = [
   "Motion design",
   "Logo",
@@ -19,11 +21,8 @@ const contactMethods = ["Email", "Telegram", "Whatsapp"];
 export default function LaunchSection({ className }) {
   const [contactMethod, setContactMethod] = useState("Email");
   const [selectedServices, setSelectedServices] = useState([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    contact: "",
-    project: "",
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
   const toggleService = (service) => {
     setSelectedServices((prev) =>
@@ -33,16 +32,55 @@ export default function LaunchSection({ className }) {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: implement form submission endpoint
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          contactMethod,
+          contact: formData.contact,
+          services: selectedServices,
+          project: formData.project,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("success");
+      setFormData(INITIAL_FORM);
+      setSelectedServices([]);
+      setContactMethod("Email");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
     <section
       id="contact"
-      className={twMerge("bg-black py-16 md:py-24", className)}
+      className={twMerge("relative bg-black py-16 md:py-24", className)}
     >
+      {/* Thank you popup */}
+      {status === "success" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+          <div className="bg-[#1c1c1c] border border-white/10 rounded-lg p-10 max-w-md w-full text-center flex flex-col items-center gap-6">
+            <span className="font-heading text-primary-500 lowercase" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1 }}>
+              thank you!
+            </span>
+            <p className="text-white/70 text-lg leading-1.4">
+              Your message has been received. We'll get back to you soon.
+            </p>
+            <button
+              onClick={() => setStatus("idle")}
+              className="font-heading text-[22px] lowercase tracking-2 text-black bg-primary-500 px-8 py-3 rounded-[4px] hover:bg-white transition-colors"
+            >
+              close
+            </button>
+          </div>
+        </div>
+      )}
       <div className="mx-auto max-w-[var(--max-width)] px-4 md:px-[30px]">
         <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
 
@@ -170,38 +208,46 @@ export default function LaunchSection({ className }) {
             {/* Submit button */}
             <button
               type="submit"
-              className="group relative flex items-center justify-between bg-primary-500 rounded-[4px] px-10 py-6 overflow-hidden"
+              disabled={status === "loading"}
+              className="group relative flex items-center justify-between bg-primary-500 rounded-[4px] px-10 py-6 overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
               style={{ width: "388px", maxWidth: "100%" }}
             >
               <span className="font-heading text-[34px] leading-1.3 lowercase tracking-2 text-black">
-                submit
+                {status === "loading" ? "sending..." : status === "error" ? "try again" : "submit"}
               </span>
-              <svg
-                width="44"
-                height="37"
-                viewBox="0 0 51 29"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="flex-shrink-0"
-              >
-                <path
-                  className="origin-left duration-500 scale-x-[66%] group-hover:scale-x-100 transition-all"
-                  d="M49.5137 14.3005L0 14.5005"
-                  stroke="#000"
-                  strokeWidth="2.63889"
-                  strokeLinecap="square"
-                  strokeLinejoin="round"
-                />
-                <path
-                  className="origin-left duration-500 -translate-x-1/3 group-hover:translate-x-0 transition-all"
-                  d="M35.0545 26.8875C41.3581 17.8033 49.6162 14.5 49.6162 14.5C49.6162 14.5 41.3581 11.1967 35.0544 2.11184"
-                  stroke="#000"
-                  strokeWidth="2.63889"
-                  strokeLinecap="square"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              {status !== "loading" && (
+                <svg
+                  width="44"
+                  height="37"
+                  viewBox="0 0 51 29"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex-shrink-0"
+                >
+                  <path
+                    className="origin-left duration-500 scale-x-[66%] group-hover:scale-x-100 transition-all"
+                    d="M49.5137 14.3005L0 14.5005"
+                    stroke="#000"
+                    strokeWidth="2.63889"
+                    strokeLinecap="square"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    className="origin-left duration-500 -translate-x-1/3 group-hover:translate-x-0 transition-all"
+                    d="M35.0545 26.8875C41.3581 17.8033 49.6162 14.5 49.6162 14.5C49.6162 14.5 41.3581 11.1967 35.0544 2.11184"
+                    stroke="#000"
+                    strokeWidth="2.63889"
+                    strokeLinecap="square"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
             </button>
+            {status === "error" && (
+              <p className="text-primary-500 text-base mt-2">
+                Something went wrong. Please try again or email us directly.
+              </p>
+            )}
           </form>
         </div>
       </div>

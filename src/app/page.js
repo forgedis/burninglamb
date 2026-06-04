@@ -17,7 +17,7 @@ export default function Home() {
   }, []);
   return (
     <>
-      <Intro className="mb-32 sm:mb-28 pt-10" />
+      <Intro style={{ paddingTop: 'clamp(1.5rem, 2.9vw, 2.5rem)', marginBottom: 'clamp(3rem, 5.5vw, 5rem)' }} />
       <Projects className="mb-20" />
       <BigButton id="view-more-projects" title="View more projects" href="https://dribbble.com/burninglamb" target="_blank" />
       <Approach className="my-20" />
