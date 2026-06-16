@@ -70,7 +70,7 @@ export default function LaunchSection({ className }) {
               thank you!
             </span>
             <p className="text-white/70 text-lg leading-1.4">
-              Your message has been received. We'll get back to you soon.
+              Your message has been received. We&apos;ll get back to you soon.
             </p>
             <button
               onClick={() => setStatus("idle")}

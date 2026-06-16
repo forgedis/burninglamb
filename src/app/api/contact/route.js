@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const dynamic = "force-dynamic";
 
 export async function POST(request) {
   try {
@@ -10,6 +10,8 @@ export async function POST(request) {
     if (!name || !contact) {
       return Response.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const { about, goal, goalDescription, audience, branding, feeling, designDirection, designDescription, support, timeline, budget, extra } = body;
 
