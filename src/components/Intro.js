@@ -47,7 +47,7 @@ export default function Intro({ className, ...other }) {
       className={twMerge("relative", className)}
       {...other}
     >
-      <h1 className="w-full overflow-hidden" style={{ marginBottom: 'clamp(4rem, 13.7vw, 12rem)' }} aria-label="Burning Lamb">
+      <h1 className="w-full overflow-hidden" style={{ marginBottom: 'clamp(2rem, 13.7vw, 12rem)' }} aria-label="Burning Lamb">
         <svg
           width="100%"
           viewBox="0 0 1380 166"

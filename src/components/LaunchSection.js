@@ -64,20 +64,18 @@ export default function LaunchSection({ className }) {
     >
       {/* Thank you popup */}
       {status === "success" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
-          <div className="bg-[#1c1c1c] border border-white/10 rounded-lg p-10 max-w-md w-full text-center flex flex-col items-center gap-6">
-            <span className="font-heading text-primary-500 lowercase" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1 }}>
-              thank you!
-            </span>
-            <p className="text-white/70 text-lg leading-1.4">
-              Your message has been received. We&apos;ll get back to you soon.
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={(e) => { if (!e.target.closest('[data-card]')) setStatus("idle"); }}
+        >
+          <div data-card className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px]">
+            <div className="logo logo-scaled mb-6" />
+            <h2 className="font-heading text-white text-[34px] leading-[1.2] mb-3 text-center lowercase">
+              thank you for<br />submitting
+            </h2>
+            <p className="text-white/60 text-[18px] font-medium mt-1" style={{ fontFamily: "'Darker Grotesque', sans-serif" }}>
+              We will get back to you shortly.
             </p>
-            <button
-              onClick={() => setStatus("idle")}
-              className="font-heading text-[22px] lowercase tracking-2 text-black bg-primary-500 px-8 py-3 rounded-[4px] hover:bg-white transition-colors"
-            >
-              close
-            </button>
           </div>
         </div>
       )}

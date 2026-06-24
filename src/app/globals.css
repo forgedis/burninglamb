@@ -240,6 +240,11 @@ textarea::placeholder {
   opacity: 1;
 }
 
+.font-heading-plain {
+  font-family: "Dirtyline 36daysoftype 2022";
+  font-feature-settings: "ss01" off, "ss02" off, "ss03" off, "ss04" off, "ss05" off, "ss06" off, "ss07" off, "ss08" off, "ss09" off, "ss10" off, "ss11" off, "ss12" off, "ss13" off, "ss14" off, "ss15" off, "ss16" off, "ss17" off, "ss18" off, "ss19" off, "ss20" off, "calt" off;
+}
+
 .explode-circle {
   animation: explode 0.7s forwards;
 }

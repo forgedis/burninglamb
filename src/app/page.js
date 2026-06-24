@@ -41,18 +41,18 @@ export default function Home() {
     <>
       {showThanks && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
           onClick={(e) => { if (!cardRef.current?.contains(e.target)) setShowThanks(false); }}
         >
           <div
             ref={cardRef}
-            className="bg-[#1a1a1a] rounded-2xl px-14 py-12 flex flex-col items-center text-center w-[340px]"
+            className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px]"
           >
             <div className="logo logo-scaled mb-6" />
             <h2
-              className="font-heading text-white text-[34px] leading-[1.2] mb-3 text-center"
+              className="font-heading text-white text-[34px] leading-[1.2] mb-3 text-center lowercase"
             >
-              Thank you for<br />submitting
+              thank you for<br />submitting
             </h2>
             <p className="text-white/60 text-[18px] font-medium mt-1" style={dgFont}>
               We will get back to you shortly.
