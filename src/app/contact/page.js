@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -117,6 +117,13 @@ export default function ContactPage() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState(INITIAL_ANSWERS);
   const [status, setStatus] = useState("idle");
+  const thankYouRef = useRef(null);
+
+  useEffect(() => {
+    if (status !== "success") return;
+    const timer = setTimeout(() => router.push("/"), 3000);
+    return () => clearTimeout(timer);
+  }, [status, router]);
 
   const current = STEPS[step - 1];
 
@@ -182,11 +189,14 @@ export default function ContactPage() {
     <div className="fixed inset-0 bg-black z-50 overflow-y-auto">
       {/* Thank you overlay */}
       {status === "success" && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#111] rounded-xl px-12 py-10 flex flex-col items-center text-center max-w-sm mx-4">
+        <div
+          className="absolute inset-0 z-10 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={(e) => { if (!thankYouRef.current?.contains(e.target)) router.push("/"); }}
+        >
+          <div ref={thankYouRef} className="bg-[#111] rounded-xl px-12 py-10 flex flex-col items-center text-center max-w-sm mx-4">
             <div className="logo logo-scaled mb-6" />
             <h2 className="font-heading text-white text-[34px] leading-[1.2] lowercase mb-3">
-              Thank you for<br />submitting
+              <span style={dgFont}>t</span>hank you for<br />submitting
             </h2>
             <p className="text-white/60 text-[18px] font-medium mt-1" style={dgFont}>
               We will get back to you shortly.
@@ -220,18 +230,23 @@ export default function ContactPage() {
 
         {/* ── Progress dots ── centered, absolute top-[119px] */}
         <div className="absolute left-1/2 -translate-x-1/2 top-[119px] flex items-center gap-[41.5px]">
-          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-full transition-all duration-300 shrink-0"
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: i + 1 < step ? "#f04823" : i + 1 === step ? "#ffffff" : "transparent",
-                border: "1.5px solid #f04823",
-              }}
-            />
-          ))}
+          {Array.from({ length: TOTAL_STEPS }).map((_, i) => {
+            const isPast = i + 1 < step;
+            const isCurrent = i + 1 === step;
+            return (
+              <button
+                key={i}
+                onClick={() => isPast && setStep(i + 1)}
+                className={`rounded-full transition-all duration-300 shrink-0${isPast ? " cursor-pointer hover:opacity-70" : " cursor-default"}`}
+                style={{
+                  width: 12,
+                  height: 12,
+                  backgroundColor: isPast ? "#f04823" : isCurrent ? "#ffffff" : "transparent",
+                  border: "1.5px solid #f04823",
+                }}
+              />
+            );
+          })}
         </div>
 
         {/* ── Content block ── 470px wide, centered, starts at top-[191px] */}
