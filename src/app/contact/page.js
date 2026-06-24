@@ -20,7 +20,7 @@ const STEPS = [
     subtitle: "Select the primary purpose of the website project.",
     type: "radio",
     cols: 2,
-    options: ["Generate leads", "Online shop/Product showcase", "Portfolio", "Build brand awareness", "Book appointments", "Educational", "Create community", "Other"],
+    options: ["Generate leads", "Online shop/Product showcase", "Portfolio", "Build brand awareness", "Book appointments", "Educational", "Platform", "Other"],
     conditionalText: "Other",
     textareaPlaceholder: "Shortly describe your goal",
   },
@@ -236,12 +236,12 @@ export default function ContactPage() {
             return (
               <button
                 key={i}
-                onClick={() => isPast && setStep(i + 1)}
+                onClick={() => (isPast || isCurrent) && step > 1 && setStep(i + 1)}
                 className={`rounded-full transition-all duration-300 shrink-0${isPast ? " cursor-pointer hover:opacity-70" : " cursor-default"}`}
                 style={{
                   width: 12,
                   height: 12,
-                  backgroundColor: isPast ? "#f04823" : isCurrent ? "#ffffff" : "transparent",
+                  backgroundColor: isPast || isCurrent ? "#f04823" : "transparent",
                   border: "1.5px solid #f04823",
                 }}
               />
@@ -250,7 +250,7 @@ export default function ContactPage() {
         </div>
 
         {/* ── Content block ── 470px wide, centered, starts at top-[191px] */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-[191px] w-full max-w-[470px] px-4">
+        <div className="absolute left-1/2 -translate-x-1/2 top-[191px] w-[470px] max-w-[calc(100vw-40px)]">
 
           {/* Question + subtitle */}
           <div className="flex flex-col gap-[20px] mb-[50px]">
@@ -290,9 +290,15 @@ export default function ContactPage() {
               <div
                 className={
                   current.cols === 2
-                    ? "grid grid-cols-2 gap-x-[50px] gap-y-[30px] mb-[30px]"
+                    ? "grid gap-y-[30px] mb-[30px]"
                     : "flex flex-col gap-[30px] mb-[30px]"
                 }
+                style={current.cols === 2 ? {
+                  gridTemplateColumns: "1fr 1fr",
+                  gridAutoFlow: "column",
+                  gridTemplateRows: `repeat(${Math.ceil(current.options.length / 2)}, auto)`,
+                  columnGap: "50px",
+                } : undefined}
               >
                 {current.options.map((opt) => {
                   const selected = answers[current.id] === opt;
@@ -312,7 +318,7 @@ export default function ContactPage() {
                         }}
                       />
                       <span
-                        className="text-[#fbf7f0] leading-[1.2]"
+                        className="text-[#fbf7f0] leading-[1.2] whitespace-nowrap"
                         style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
                       >
                         {opt}
