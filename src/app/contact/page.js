@@ -176,93 +176,109 @@ export default function ContactPage() {
 
   const isLastStep = step === TOTAL_STEPS;
 
+  const dgFont = { fontFamily: "'Darker Grotesque', sans-serif" };
+
   return (
-    <div className="fixed inset-0 bg-black flex flex-col z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-black z-50 overflow-y-auto">
       {/* Thank you overlay */}
       {status === "success" && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/80 backdrop-blur-sm">
           <div className="bg-[#111] rounded-xl px-12 py-10 flex flex-col items-center text-center max-w-sm mx-4">
             <div className="logo logo-scaled mb-6" />
-            <h2 className="font-heading text-white text-[28px] leading-[1.1] mb-3">
+            <h2 className="font-heading text-white text-[34px] leading-[1.2] lowercase mb-3">
               Thank you for<br />submitting
             </h2>
-            <p className="text-[#929292] text-[18px] font-medium">We will get back to you shortly.</p>
+            <p className="text-white/60 text-[18px] font-medium mt-1" style={dgFont}>
+              We will get back to you shortly.
+            </p>
           </div>
         </div>
       )}
 
-      {/* Centered 534px column — header row at top */}
-      <div className="w-full flex justify-center px-4 pt-[16px] shrink-0">
-        <div className="w-full max-w-[534px] flex items-center justify-between">
+      {/* Page uses a min-height layout so button is always near bottom on short content */}
+      <div className="relative min-h-screen w-full">
+
+        {/* ── Nav row ── centered 534px, absolute top-[60px] */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-[60px] w-full max-w-[534px] px-4 flex items-center justify-between">
           <button
             onClick={() => (step > 1 ? setStep((s) => s - 1) : router.push("/"))}
             className="flex items-center gap-[6px] hover:opacity-80 transition-opacity"
           >
             <Image src="/svg/lamb-primary.svg" alt="" width={21} height={16} />
-            <span className="text-[18px] text-primary-500 underline decoration-solid" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontWeight: 400 }}>
+            <span
+              className="text-[18px] text-primary-500 underline decoration-solid leading-[1.2]"
+              style={{ ...dgFont, fontWeight: 400 }}
+            >
               Navigate to Home
             </span>
           </button>
-          <span style={{ fontFamily: "'Darker Grotesque', sans-serif", fontWeight: 500, fontSize: "18px" }}>
-            <span className="text-white">{String(step).padStart(2, "0")}</span>
-            <span className="text-[#929292]"> / {String(TOTAL_STEPS).padStart(2, "0")}</span>
+          <span style={{ ...dgFont, fontWeight: 500, fontSize: "18px", lineHeight: "1.2" }}>
+            <span className="text-white">{step}</span>
+            <span className="text-[#929292]">{` / ${TOTAL_STEPS}`}</span>
           </span>
         </div>
-      </div>
 
-      {/* Progress dots — full width centered */}
-      <div className="flex items-center justify-center gap-[61px] pt-[28px] shrink-0">
-        {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-          <div
-            key={i}
-            className="rounded-full transition-all duration-300"
-            style={{
-              width: i + 1 === step ? 12 : 12,
-              height: i + 1 === step ? 12 : 12,
-              backgroundColor: i + 1 < step ? "#f04823" : i + 1 === step ? "#ffffff" : "transparent",
-              border: "1.5px solid #f04823",
-            }}
-          />
-        ))}
-      </div>
+        {/* ── Progress dots ── centered, absolute top-[119px] */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-[119px] flex items-center gap-[41.5px]">
+          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-full transition-all duration-300 shrink-0"
+              style={{
+                width: 12,
+                height: 12,
+                backgroundColor: i + 1 < step ? "#f04823" : i + 1 === step ? "#ffffff" : "transparent",
+                border: "1.5px solid #f04823",
+              }}
+            />
+          ))}
+        </div>
 
-      {/* Content column — 534px centered, left-aligned content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-[60px]">
-        <div className="w-full max-w-[534px]">
+        {/* ── Content block ── 470px wide, centered, starts at top-[191px] */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-[191px] w-full max-w-[470px] px-4">
 
-          {/* Question */}
-          <div className="mb-[30px]">
+          {/* Question + subtitle */}
+          <div className="flex flex-col gap-[20px] mb-[50px]">
             <h1
-              className="font-heading text-white lowercase leading-[1.2] mb-[10px]"
+              className="font-heading text-white lowercase leading-[1.2]"
               style={{ fontSize: "32px", letterSpacing: "-0.64px" }}
             >
               {current.question}
             </h1>
             {current.subtitle && (
-              <p className="text-[#929292]" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "16px", fontWeight: 500 }}>
+              <p
+                className="text-white/60 leading-[1.2]"
+                style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
+              >
                 {current.subtitle}
               </p>
             )}
           </div>
 
-          {/* text input */}
+          {/* ── text input ── */}
           {current.type === "text" && (
-            <div className="border-[0.5px] border-white/40 rounded-[8px] px-[20px] py-[22px] mb-[30px]">
+            <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px] mb-[50px]">
               <input
                 type="text"
                 placeholder={current.placeholder}
                 value={answers[current.id]}
                 onChange={(e) => setAnswer(current.id, e.target.value)}
-                className="w-full bg-transparent text-white placeholder-[#929292] outline-none"
-                style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}
+                className="w-full bg-transparent text-white outline-none"
+                style={{ ...dgFont, fontSize: "20px", fontWeight: 500, color: "#fff" }}
               />
             </div>
           )}
 
-          {/* radio options */}
+          {/* ── radio options ── */}
           {current.type === "radio" && (
-            <div className="mb-[30px]">
-              <div className={current.cols === 2 ? "grid grid-cols-2 gap-x-[50px] gap-y-[30px] mb-[30px]" : "flex flex-col gap-[30px] mb-[30px]"}>
+            <div className="mb-[50px]">
+              <div
+                className={
+                  current.cols === 2
+                    ? "grid grid-cols-2 gap-x-[50px] gap-y-[30px] mb-[30px]"
+                    : "flex flex-col gap-[30px] mb-[30px]"
+                }
+              >
                 {current.options.map((opt) => {
                   const selected = answers[current.id] === opt;
                   return (
@@ -280,46 +296,57 @@ export default function ContactPage() {
                           border: "1.5px solid #f04823",
                         }}
                       />
-                      <span className="text-[#fbf7f0]" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}>{opt}</span>
+                      <span
+                        className="text-[#fbf7f0] leading-[1.2]"
+                        style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
+                      >
+                        {opt}
+                      </span>
                     </button>
                   );
                 })}
               </div>
               {current.conditionalText && answers[current.id] === current.conditionalText && (
-                <div className="border-[0.5px] border-white/40 rounded-[8px] px-[20px] py-[22px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
                   <input
                     type="text"
                     placeholder={current.textareaPlaceholder}
                     value={answers[`${current.id}_text`] || ""}
                     onChange={(e) => setAnswer(`${current.id}_text`, e.target.value)}
-                    className="w-full bg-transparent text-white placeholder-[#929292] outline-none"
-                    style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}
+                    className="w-full bg-transparent text-white outline-none"
+                    style={{ ...dgFont, fontSize: "20px", fontWeight: 500 }}
                   />
                 </div>
               )}
             </div>
           )}
 
-          {/* contact step */}
+          {/* ── contact step ── */}
           {current.type === "contact" && (
-            <div className="flex flex-col gap-[20px] mb-[30px]">
+            <div className="flex flex-col gap-[20px] mb-[50px]">
               <div>
-                <p className="mb-[8px] text-white" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "16px", fontWeight: 500 }}>
+                <p
+                  className="mb-[10px] text-white leading-[1.2]"
+                  style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
+                >
                   Your data <span className="text-primary-500">*</span>
                 </p>
-                <div className="border-[0.5px] border-white/40 rounded-[8px] px-[20px] py-[22px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
                   <input
                     type="text"
                     placeholder="Name or Company"
                     value={answers[11].name}
                     onChange={(e) => setAnswer(11, { ...answers[11], name: e.target.value })}
-                    className="w-full bg-transparent text-white placeholder-[#929292] outline-none"
-                    style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}
+                    className="w-full bg-transparent text-white outline-none"
+                    style={{ ...dgFont, fontSize: "20px", fontWeight: 500 }}
                   />
                 </div>
               </div>
               <div>
-                <p className="mb-[12px] text-white" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "16px", fontWeight: 500 }}>
+                <p
+                  className="mb-[12px] text-white leading-[1.2]"
+                  style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
+                >
                   Where can we contact you? <span className="text-primary-500">*</span>
                 </p>
                 <div className="flex gap-[30px] mb-[16px]">
@@ -340,33 +367,47 @@ export default function ContactPage() {
                             border: "1.5px solid #f04823",
                           }}
                         />
-                        <span className="text-[#fbf7f0]" style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}>{opt}</span>
+                        <span
+                          className="text-[#fbf7f0] leading-[1.2]"
+                          style={{ ...dgFont, fontSize: "18px", fontWeight: 500 }}
+                        >
+                          {opt}
+                        </span>
                       </button>
                     );
                   })}
                 </div>
-                <div className="border-[0.5px] border-white/40 rounded-[8px] px-[20px] py-[22px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
                   <input
                     type={answers[11].method === "Email" ? "email" : "text"}
-                    placeholder={answers[11].method === "Email" ? "E-mail" : answers[11].method === "Telegram" ? "@username" : "+421 000 000 000"}
+                    placeholder={
+                      answers[11].method === "Email"
+                        ? "E-mail"
+                        : answers[11].method === "Telegram"
+                        ? "@username"
+                        : "+421 000 000 000"
+                    }
                     value={answers[11].value}
                     onChange={(e) => setAnswer(11, { ...answers[11], value: e.target.value })}
-                    className="w-full bg-transparent text-white placeholder-[#929292] outline-none"
-                    style={{ fontFamily: "'Darker Grotesque', sans-serif", fontSize: "18px", fontWeight: 500 }}
+                    className="w-full bg-transparent text-white outline-none"
+                    style={{ ...dgFont, fontSize: "20px", fontWeight: 500 }}
                   />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Continue / Submit button */}
+        </div>
+
+        {/* ── Continue / Submit button ── 534px centered, absolute bottom-[93px] */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-[93px] w-full max-w-[534px] px-4">
           <button
             onClick={handleNext}
             disabled={!canContinue() || status === "loading"}
             className="w-full flex items-center justify-between bg-primary-500 rounded-[4px] px-[40px] disabled:opacity-40 disabled:cursor-not-allowed overflow-hidden"
             style={{ height: "84px" }}
           >
-            <span className="font-heading text-[34px] leading-[1.3] lowercase tracking-[0.68px] text-black">
+            <span className="font-heading text-[34px] leading-[1.3] lowercase tracking-[0.02em] text-black">
               {status === "loading" ? "sending…" : isLastStep ? "submit" : "continue"}
             </span>
             <svg width="44" height="29" viewBox="0 0 51 29" fill="none" className="shrink-0">
@@ -380,6 +421,7 @@ export default function ContactPage() {
             </p>
           )}
         </div>
+
       </div>
     </div>
   );

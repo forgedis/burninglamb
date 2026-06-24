@@ -234,6 +234,12 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: #929292;
+  opacity: 1;
+}
+
 .explode-circle {
   animation: explode 0.7s forwards;
 }
