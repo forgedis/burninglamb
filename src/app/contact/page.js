@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -117,13 +117,6 @@ export default function ContactPage() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState(INITIAL_ANSWERS);
   const [status, setStatus] = useState("idle");
-  const thankYouRef = useRef(null);
-
-  useEffect(() => {
-    if (status !== "success") return;
-    const timer = setTimeout(() => router.push("/"), 3000);
-    return () => clearTimeout(timer);
-  }, [status, router]);
 
   const current = STEPS[step - 1];
 
@@ -167,7 +160,7 @@ export default function ContactPage() {
         }),
       });
       if (!res.ok) throw new Error();
-      setStatus("success");
+      router.push("/?thanks=1");
     } catch {
       setStatus("error");
     }
@@ -187,24 +180,6 @@ export default function ContactPage() {
 
   return (
     <div className="fixed inset-0 bg-black z-50 overflow-y-auto">
-      {/* Thank you overlay */}
-      {status === "success" && (
-        <div
-          className="absolute inset-0 z-10 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          onClick={(e) => { if (!thankYouRef.current?.contains(e.target)) router.push("/"); }}
-        >
-          <div ref={thankYouRef} className="bg-[#111] rounded-xl px-12 py-10 flex flex-col items-center text-center max-w-sm mx-4">
-            <div className="logo logo-scaled mb-6" />
-            <h2 className="font-heading text-white text-[34px] leading-[1.2] lowercase mb-3">
-              <span style={dgFont}>t</span>hank you for<br />submitting
-            </h2>
-            <p className="text-white/60 text-[18px] font-medium mt-1" style={dgFont}>
-              We will get back to you shortly.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Page uses a min-height layout so button is always near bottom on short content */}
       <div className="relative min-h-screen w-full">
 

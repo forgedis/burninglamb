@@ -16,7 +16,7 @@ export async function POST(request) {
     const { about, goal, goalDescription, audience, branding, feeling, designDirection, designDescription, support, timeline, budget, extra } = body;
 
     await resend.emails.send({
-      from: "Burning Lamb Contact <onboarding@resend.dev>",
+      from: "Burning Lamb Contact <hi@burninglamb.eu>",
       to: [process.env.CONTACT_EMAIL || "hi@burninglamb.eu"],
       subject: `New website inquiry from ${name}`,
       html: `
