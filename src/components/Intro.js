@@ -44,17 +44,18 @@ export default function Intro({ className, ...other }) {
 
   return (
     <section
-      className={twMerge("relative", className)}
+      className={twMerge("relative overflow-hidden", className)}
       {...other}
     >
-      <h1 className="w-full overflow-hidden" style={{ marginBottom: 'clamp(2rem, 13.7vw, 12rem)' }} aria-label="Burning Lamb">
+      <h1 className="w-full" style={{ marginBottom: 'clamp(4rem, 13.7vw, 12rem)' }} aria-label="Burning Lamb">
         <svg
           width="100%"
           viewBox="0 0 1380 166"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden
-          style={{ display: "block", overflow: "hidden" }}
+          preserveAspectRatio="xMidYMid meet"
+          style={{ display: "block", overflow: "visible" }}
         >
           <defs>
             <clipPath id="title-clip">

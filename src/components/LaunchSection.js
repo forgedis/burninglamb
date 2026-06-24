@@ -69,7 +69,7 @@ export default function LaunchSection({ className }) {
           onClick={(e) => { if (!e.target.closest('[data-card]')) setStatus("idle"); }}
         >
           <div data-card className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px]">
-            <div className="logo logo-scaled mb-6" />
+            <div className="logo logo-main-mobile mb-6" />
             <h2 className="font-heading text-white text-[34px] leading-[1.2] mb-3 text-center lowercase">
               thank you for<br />submitting
             </h2>
