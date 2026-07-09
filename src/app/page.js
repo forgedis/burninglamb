@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -14,22 +14,27 @@ import LaunchSection from "@/components/LaunchSection";
 
 const dgFont = { fontFamily: "'Darker Grotesque', sans-serif" };
 
-export default function Home() {
+function ThanksHandler({ onThanks }) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  useEffect(() => {
+    if (searchParams.get("thanks") === "1") {
+      onThanks();
+      router.replace("/", { scroll: false });
+    }
+  }, [searchParams, router, onThanks]);
+
+  return null;
+}
+
+export default function Home() {
   const [showThanks, setShowThanks] = useState(false);
   const cardRef = useRef(null);
 
   useEffect(() => {
     AOS.init({});
   }, []);
-
-  useEffect(() => {
-    if (searchParams.get("thanks") === "1") {
-      setShowThanks(true);
-      router.replace("/", { scroll: false });
-    }
-  }, [searchParams, router]);
 
   useEffect(() => {
     if (!showThanks) return;
@@ -39,14 +44,17 @@ export default function Home() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <ThanksHandler onThanks={() => setShowThanks(true)} />
+      </Suspense>
       {showThanks && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-modal-backdrop"
           onClick={(e) => { if (!cardRef.current?.contains(e.target)) setShowThanks(false); }}
         >
           <div
             ref={cardRef}
-            className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px]"
+            className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px] animate-modal-card"
           >
             <div className="logo logo-main-mobile mb-6" />
             <h2

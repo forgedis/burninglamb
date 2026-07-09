@@ -65,10 +65,10 @@ export default function LaunchSection({ className }) {
       {/* Thank you popup */}
       {status === "success" && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-modal-backdrop"
           onClick={(e) => { if (!e.target.closest('[data-card]')) setStatus("idle"); }}
         >
-          <div data-card className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px]">
+          <div data-card className="bg-[#111111] rounded-[12px] px-12 py-10 flex flex-col items-center text-center w-[340px] animate-modal-card">
             <div className="logo logo-main-mobile mb-6" />
             <h2 className="font-heading text-white text-[34px] leading-[1.2] mb-3 text-center lowercase">
               thank you for<br />submitting
@@ -153,8 +153,14 @@ export default function LaunchSection({ className }) {
                 ))}
               </div>
               <input
-                type="text"
-                placeholder="E-mail"
+                type={contactMethod === "Email" ? "email" : "text"}
+                placeholder={
+                  contactMethod === "Email"
+                    ? "E-mail"
+                    : contactMethod === "Telegram"
+                    ? "@username"
+                    : "+421 000 000 000"
+                }
                 value={formData.contact}
                 onChange={(e) =>
                   setFormData((p) => ({ ...p, contact: e.target.value }))

@@ -79,6 +79,8 @@ const STEPS = [
     type: "radio",
     cols: 2,
     options: ["Under €500", "Under €1,000", "€1,000-€3,000", "€3,000-€5,000", "Prefer to discuss", "Other"],
+    conditionalText: "Other",
+    textareaPlaceholder: "Shortly describe your budget",
   },
   {
     id: 10,
@@ -108,6 +110,7 @@ const INITIAL_ANSWERS = {
   7: "",
   8: "",
   9: "",
+  "9_text": "",
   10: "",
   11: { name: "", method: "Email", value: "" },
 };
@@ -130,8 +133,12 @@ export default function ContactPage() {
       return answers[11].name.trim().length > 0 && answers[11].value.trim().length > 0;
     }
     const val = answers[current.id];
-    if (typeof val === "string") return val.trim().length > 0;
-    return !!val;
+    if (typeof val === "string" && !val.trim().length) return false;
+    if (!val) return false;
+    if (current.conditionalText && val === current.conditionalText) {
+      return (answers[`${current.id}_text`] || "").trim().length > 0;
+    }
+    return true;
   }
 
   async function handleSubmit() {
@@ -156,6 +163,7 @@ export default function ContactPage() {
           support: answers[7],
           timeline: answers[8],
           budget: answers[9],
+          budgetDescription: answers["9_text"],
           extra: answers[10],
         }),
       });
@@ -180,13 +188,14 @@ export default function ContactPage() {
 
   return (
     <div className="fixed inset-0 bg-black z-50 overflow-y-auto">
-      {/* Page uses a min-height layout so button is always near bottom on short content */}
-      <div className="relative min-h-screen w-full">
+      {/* Flex column layout: nav/dots pinned top, content flows naturally,
+          button always sits right below content — never overlaps. */}
+      <div className="relative min-h-screen w-full flex flex-col items-center px-4 pt-[60px] pb-[40px]">
 
-        {/* ── Nav row ── centered 534px, absolute top-[60px] */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-[60px] w-full max-w-[534px] px-4 flex items-center justify-between">
+        {/* ── Nav row ── centered 534px */}
+        <div className="w-full max-w-[534px] flex items-center justify-between shrink-0">
           <button
-            onClick={() => (step > 1 ? setStep((s) => s - 1) : router.push("/"))}
+            onClick={() => router.push("/")}
             className="flex items-center gap-[6px] hover:opacity-80 transition-opacity"
           >
             <Image src="/svg/lamb-primary.svg" alt="" width={21} height={16} />
@@ -203,8 +212,8 @@ export default function ContactPage() {
           </span>
         </div>
 
-        {/* ── Progress dots ── centered, absolute top-[119px] */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-[119px] flex items-center gap-[41.5px]">
+        {/* ── Progress dots ── centered */}
+        <div className="flex items-center gap-[41.5px] flex-wrap justify-center shrink-0 mt-[35px]">
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => {
             const isPast = i + 1 < step;
             const isCurrent = i + 1 === step;
@@ -224,11 +233,11 @@ export default function ContactPage() {
           })}
         </div>
 
-        {/* ── Content block ── 470px wide, centered, starts at top-[191px] */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-[191px] w-[470px] max-w-[calc(100vw-40px)]">
+        {/* ── Content block ── 470px wide, centered, grows naturally, vertically centered when short */}
+        <div className="flex-1 w-[470px] max-w-[calc(100vw-40px)] flex flex-col justify-center py-[40px]">
 
           {/* Question + subtitle */}
-          <div className="flex flex-col gap-[20px] mb-[50px]">
+          <div className="flex flex-col gap-[20px] mb-[40px]">
             <h1
               className="font-heading text-white lowercase leading-[1.2]"
               style={{ fontSize: "32px", letterSpacing: "-0.64px" }}
@@ -247,7 +256,7 @@ export default function ContactPage() {
 
           {/* ── text input ── */}
           {current.type === "text" && (
-            <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px] mb-[50px]">
+            <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[22px] mb-[40px]">
               <input
                 type="text"
                 placeholder={current.placeholder}
@@ -261,12 +270,12 @@ export default function ContactPage() {
 
           {/* ── radio options ── */}
           {current.type === "radio" && (
-            <div className="mb-[50px]">
+            <div className="mb-[40px]">
               <div
                 className={
                   current.cols === 2
-                    ? "grid gap-y-[30px] mb-[30px]"
-                    : "flex flex-col gap-[30px] mb-[30px]"
+                    ? "grid gap-y-[24px] mb-[24px]"
+                    : "flex flex-col gap-[24px] mb-[24px]"
                 }
                 style={current.cols === 2 ? {
                   gridTemplateColumns: "1fr 1fr",
@@ -303,10 +312,11 @@ export default function ContactPage() {
                 })}
               </div>
               {current.conditionalText && answers[current.id] === current.conditionalText && (
-                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[22px]">
                   <input
                     type="text"
                     placeholder={current.textareaPlaceholder}
+                    required
                     value={answers[`${current.id}_text`] || ""}
                     onChange={(e) => setAnswer(`${current.id}_text`, e.target.value)}
                     className="w-full bg-transparent text-white outline-none"
@@ -319,7 +329,7 @@ export default function ContactPage() {
 
           {/* ── contact step ── */}
           {current.type === "contact" && (
-            <div className="flex flex-col gap-[20px] mb-[50px]">
+            <div className="flex flex-col gap-[20px] mb-[40px]">
               <div>
                 <p
                   className="mb-[10px] text-white leading-[1.2]"
@@ -327,7 +337,7 @@ export default function ContactPage() {
                 >
                   Your data <span className="text-primary-500">*</span>
                 </p>
-                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[22px]">
                   <input
                     type="text"
                     placeholder="Name or Company"
@@ -373,7 +383,7 @@ export default function ContactPage() {
                     );
                   })}
                 </div>
-                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[24px]">
+                <div className="border-[0.5px] border-white rounded-[8px] px-[20px] py-[22px]">
                   <input
                     type={answers[11].method === "Email" ? "email" : "text"}
                     placeholder={
@@ -395,20 +405,34 @@ export default function ContactPage() {
 
         </div>
 
-        {/* ── Continue / Submit button ── 534px centered, absolute bottom-[93px] */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-[93px] w-full max-w-[534px] px-4">
+        {/* ── Continue / Submit button ── 534px centered, always right below content */}
+        <div className="w-full max-w-[534px] shrink-0">
           <button
             onClick={handleNext}
             disabled={!canContinue() || status === "loading"}
-            className="w-full flex items-center justify-between bg-primary-500 rounded-[4px] px-[40px] disabled:opacity-40 disabled:cursor-not-allowed overflow-hidden"
+            className="group w-full flex items-center justify-between bg-primary-500 rounded-[4px] px-[40px] disabled:opacity-40 disabled:cursor-not-allowed overflow-hidden"
             style={{ height: "84px" }}
           >
-            <span className="font-heading text-[34px] leading-[1.3] lowercase tracking-[0.02em] text-black">
+            <span className="font-heading text-[34px] leading-none lowercase tracking-[0.02em] text-black">
               {status === "loading" ? "sending…" : isLastStep ? "submit" : "continue"}
             </span>
             <svg width="44" height="29" viewBox="0 0 51 29" fill="none" className="shrink-0">
-              <path d="M49.5137 14.3005L0 14.5005" stroke="#000" strokeWidth="2.63889" strokeLinecap="square" />
-              <path d="M35.0545 26.8875C41.3581 17.8033 49.6162 14.5 49.6162 14.5C49.6162 14.5 41.3581 11.1967 35.0544 2.11184" stroke="#000" strokeWidth="2.63889" strokeLinecap="square" />
+              <path
+                className="origin-left duration-500 scale-x-[66%] group-hover:scale-x-100 transition-all"
+                d="M49.5137 14.3005L0 14.5005"
+                stroke="#000"
+                strokeWidth="2.63889"
+                strokeLinecap="square"
+                strokeLinejoin="round"
+              />
+              <path
+                className="origin-left duration-500 -translate-x-1/3 group-hover:translate-x-0 transition-all"
+                d="M35.0545 26.8875C41.3581 17.8033 49.6162 14.5 49.6162 14.5C49.6162 14.5 41.3581 11.1967 35.0544 2.11184"
+                stroke="#000"
+                strokeWidth="2.63889"
+                strokeLinecap="square"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
           {status === "error" && (
